@@ -24,5 +24,8 @@
   "homepage": "https://github.com/thinkdevcode/twitch-chat-overlay#readme",
   "devDependencies": {
     "electron-prebuilt": "^1.2.0"
+  },
+  "dependencies": {
+    "commander": "2.9.0"
   }
 }
