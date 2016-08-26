@@ -1,34 +1,93 @@
 const electron = require('electron')
+const localShortcut = require('electron-localshortcut')
+
 const app = electron.app
+const nativeImage = electron.nativeImage
+const Menu = electron.Menu
+const Tray = electron.Tray
 const BrowserWindow = electron.BrowserWindow
-const program = require('commander')
 
-program
-    .option('-m, --maximize', 'Presents the overlay maximized')
-    .parse(process.argv)
+let mainWnd
+let childWnd
+let tray
+let edit = true
+let options = {
+  title: 'Twitch Chat Overlay',
+  height: 300,
+  width: 600
+}
 
-let mainWindow
+function editWindow() {
+ if (childWnd) childWnd.close()
+ childWnd = new BrowserWindow(Object.assign({
+    frame: true,
+    transparent: false
+  }, options))
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+  childWnd.setIgnoreMouseEvents(false)
+  childWnd.setAlwaysOnTop(false)
+  childWnd.setMenu(null)
+  childWnd.loadURL(`file://${__dirname}/edit.html`)
+  registerActions()
+}
+
+function playWindow() {
+  if (childWnd) childWnd.close()
+  childWnd = new BrowserWindow(Object.assign({
+    frame: false,
+    transparent: true
+  }, options))
+
+  childWnd.setIgnoreMouseEvents(true)
+  childWnd.setAlwaysOnTop(true)
+  childWnd.setMenu(null)
+  childWnd.loadURL(`file://${__dirname}/play.html`)
+  registerActions()
+}
+
+function registerActions() {
+  childWnd.on('closed', () => childWnd = null)
+
+  localShortcut.register(childWnd, 'F1', () => {
+    flipWindow()
+  })
+}
+
+function flipWindow() {
+  edit = !edit
+  if (edit) 
+    editWindow()
+  else
+    playWindow()
+}
+
+function createMainWnd() {
+  mainWnd = new BrowserWindow({
+    height: 1,
+    width: 1,
+    x: 0,
+    y: 0,
     frame: false,
     transparent: true
   })
-
-  if (program.maximize) mainWindow.maximize()
-  
-  mainWindow.setIgnoreMouseEvents(true)
-  mainWindow.setAlwaysOnTop(true)
-  mainWindow.setMenu(null)
-  mainWindow.loadURL(`file://${__dirname}/index.html`)
-  mainWindow.on('closed', () => mainWindow = null)
+  mainWnd.setFocusable(false)
+  mainWnd.setIgnoreMouseEvents(true)
+  mainWnd.setMenu(null)
+  mainWnd.setSkipTaskbar(true)
+  tray = new Tray('WorstIconEver.png')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Switch Mode', type: 'normal', click: flipWindow },
+    { label: '-', type: 'separator' },
+    { label: 'Exit', type: 'normal', role: 'quit' }
+  ])
+  tray.setToolTip('Twitch Chat Overlay')
+  tray.setContextMenu(contextMenu)
+  editWindow()
 }
 
-app.on('ready', createWindow)
+app.on('ready', createMainWnd)
 app.on('window-all-closed', () => app.quit())
 app.on('activate', () => {
-  if (mainWindow === null)
-    createWindow()
+  if (childWnd === null)
+    editWindow()
 })
