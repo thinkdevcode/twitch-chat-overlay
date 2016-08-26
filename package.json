@@ -1,0 +1,28 @@
+{
+  "name": "twitch-chat-overlay",
+  "version": "1.0.0",
+  "description": "A transparent Twitch chat overlay",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thinkdevcode/twitch-chat-overlay"
+  },
+  "keywords": [
+    "twitch",
+    "chat",
+    "overlay",
+    "thinkdevcode"
+  ],
+  "author": "Eugene Alfonso <thinkdevcode@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thinkdevcode/twitch-chat-overlay/issues"
+  },
+  "homepage": "https://github.com/thinkdevcode/twitch-chat-overlay#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0"
+  }
+}
