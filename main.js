@@ -27,7 +27,7 @@ function editWindow() {
   childWnd.setIgnoreMouseEvents(false)
   childWnd.setAlwaysOnTop(false)
   childWnd.setMenu(null)
-  childWnd.loadURL(`file://${__dirname}/edit.html`)
+  childWnd.loadURL(`file://${__dirname}/html/edit.html`)
   registerActions()
 }
 
@@ -41,7 +41,7 @@ function playWindow() {
   childWnd.setIgnoreMouseEvents(true)
   childWnd.setAlwaysOnTop(true)
   childWnd.setMenu(null)
-  childWnd.loadURL(`file://${__dirname}/play.html`)
+  childWnd.loadURL(`file://${__dirname}/html/play.html`)
   registerActions()
 }
 
@@ -74,7 +74,7 @@ function createMainWnd() {
   mainWnd.setIgnoreMouseEvents(true)
   mainWnd.setMenu(null)
   mainWnd.setSkipTaskbar(true)
-  tray = new Tray('WorstIconEver.png')
+  tray = new Tray('./img/worst-icon-ever.png')
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Switch Mode', type: 'normal', click: flipWindow },
     { label: '-', type: 'separator' },
