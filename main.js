@@ -18,7 +18,8 @@ function createWindow() {
   })
 
   if (program.maximize) mainWindow.maximize()
-
+  
+  mainWindow.setIgnoreMouseEvents(true)
   mainWindow.setAlwaysOnTop(true)
   mainWindow.setMenu(null)
   mainWindow.loadURL(`file://${__dirname}/index.html`)
